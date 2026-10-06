@@ -208,3 +208,4 @@ class PomodoroTimer {
 }
 
 window.pomodoroTimer = new PomodoroTimer();
+

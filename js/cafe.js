@@ -258,3 +258,4 @@ class NeutinamuCafe {
 }
 
 window.neutinamuCafe = new NeutinamuCafe();
+

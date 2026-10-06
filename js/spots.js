@@ -67,3 +67,4 @@ const SNU_SPOTS = [
 ];
 
 window.SNU_SPOTS = SNU_SPOTS;
+
