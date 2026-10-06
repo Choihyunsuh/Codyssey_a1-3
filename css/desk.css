@@ -16,16 +16,19 @@
   height: 100%;
   object-fit: cover;
   transition: opacity 0.6s ease;
+  filter: brightness(1.02) saturate(0.8) contrast(0.92); /* 파스텔톤 부드러운 채도 */
 }
 
-/* Warm Paper Vintage Film Overlay */
+/* Warm Pastel Cream Tint Overlay */
 .bg-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(250, 246, 238, 0.15) 0%, rgba(61, 47, 37, 0.45) 100%);
+  background: linear-gradient(180deg, rgba(254, 251, 244, 0.45) 0%, rgba(247, 240, 227, 0.55) 100%);
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
   pointer-events: none;
   z-index: 2;
 }
@@ -190,8 +193,8 @@
   width: 12px;
   height: 7px;
   background: var(--card-cream);
-  border-left: 2px solid #3d2f25;
-  border-bottom: 2px solid #3d2f25;
+  border-left: 1.2px solid #5a483a;
+  border-bottom: 1.2px solid #5a483a;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
 

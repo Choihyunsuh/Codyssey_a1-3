@@ -22,10 +22,10 @@
   --soft-pink: #eab4b8;
   --card-cream: #fffdf9;
   
-  /* 투박한 손그림 라인 및 그림자 */
-  --border-doodle: 2px solid #3d2f25;
-  --shadow-doodle: 3px 3px 0px #3d2f25;
-  --shadow-doodle-sm: 2px 2px 0px #3d2f25;
+  /* 부드럽고 섬세한 펜 드로잉 라인 및 소프트 그림자 */
+  --border-doodle: 1.2px solid #5a483a;
+  --shadow-doodle: 2px 2px 0px rgba(90, 72, 58, 0.35);
+  --shadow-doodle-sm: 1.5px 1.5px 0px rgba(90, 72, 58, 0.25);
   --radius-organic: 255px 15px 225px 15px / 15px 225px 15px 255px;
   --radius-soft: 14px;
   
