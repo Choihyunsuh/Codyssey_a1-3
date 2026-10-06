@@ -51,7 +51,7 @@
 
 ### 4.1. 기능 개요: AI 바리스타 맞춤 처방 & 동기부여 영수증
 - **목적**: 사용자가 공부 목표와 현재 컨디션을 입력하면, Gemini AI가 사용자의 상태에 꼭 맞는 느티나무 음료 커스텀 추천과 함께 따뜻하고 감성적인 동기부여 영수증을 발행.
-- **호출 구조**: 프론트엔드 `fetch('/api/order')` → 백엔드 Vercel Serverless Function (`api/order.py`) → `Google Gemini API (gemini-1.5-flash)`.
+- **호출 구조**: 프론트엔드 `fetch('/api/order')` → 백엔드 Vercel Serverless Function (`api/order.py`) → `Google Gemini API (gemini-3.5-flash-lite)`.
 
 ### 4.2. 입·출력 스펙
 - **입력 (Request Body)**:
@@ -81,7 +81,7 @@
 ### 5.1. 기술 스택
 - **프론트엔드**: HTML5, CSS3 (Flexbox/Grid, Dynamic Viewport Height `dvh`), Vanilla JavaScript (ES6+)
 - **백엔드**: Python 3.9+, Vercel Serverless Functions (`api/order.py`)
-- **AI 연동**: `google-genai` 또는 `google-generativeai` (Gemini 1.5 Flash)
+- **AI 연동**: `google-genai` 또는 `google-generativeai` (Gemini 3.5 Flash Lite)
 - **배포 플랫폼**: Vercel (GitHub 리포지토리 연동)
 
 ### 5.2. 디렉토리 구조

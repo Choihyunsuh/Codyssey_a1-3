@@ -36,7 +36,7 @@ def call_gemini(task, condition, drink_preference):
         f"선택 가능한 느티나무 메뉴: {', '.join(NEUTINAMU_MENU.keys())}"
     )
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key={api_key}"
     payload = {
         "contents": [
             {

@@ -5,7 +5,7 @@
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel)](https://vercel.com)
 [![Vanilla JS](https://img.shields.io/badge/Frontend-Vanilla_JS-F7DF1E?logo=javascript)](https://developer.mozilla.org)
 [![Python 3](https://img.shields.io/badge/Backend-Python_Serverless-3776AB?logo=python)](https://python.org)
-[![Google Gemini](https://img.shields.io/badge/AI-Gemini_1.5_Flash-8E75B2?logo=google)](https://deepmind.google/technologies/gemini)
+[![Google Gemini](https://img.shields.io/badge/AI-Gemini_3.5_Flash_Lite-8E75B2?logo=google)](https://deepmind.google/technologies/gemini)
 
 ---
 
@@ -28,7 +28,7 @@
 
 ### Backend & Serverless
 - **Vercel Serverless Functions (Python 3.9+)**: `api/order.py` 엔드포인트
-- **AI Model**: Google Gemini (`gemini-1.5-flash`) REST API 연동
+- **AI Model**: Google Gemini (`gemini-3.5-flash-lite`) REST API 연동
 
 ### Deployment
 - **Vercel**: GitHub 연동 자동 CI/CD 배포
