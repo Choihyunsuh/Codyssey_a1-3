@@ -1,11 +1,12 @@
 /* === study with SNU - Global Hand-drawn & Pastel Theme === */
 
-/* 온글잎 민혜체 웹폰트 */
+/* 온글잎 민혜체 웹폰트 (눈누 공식 CDN) */
 @font-face {
-  font-family: 'OwnglyphMinHye';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202@1.0/OwnglyphMinHye.woff') format('woff');
+  font-family: 'OngleipMinhye';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Minhye.woff') format('woff');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -28,14 +29,15 @@
   --radius-organic: 255px 15px 225px 15px / 15px 225px 15px 255px;
   --radius-soft: 14px;
   
-  --font-family: 'OwnglyphMinHye', -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+  --font-family: 'OngleipMinhye', cursive, sans-serif;
   --transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-* {
+*, button, input, textarea, select {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: var(--font-family) !important;
 }
 
 html, body {
