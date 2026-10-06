@@ -1,0 +1,457 @@
+/* === SNU Study Cafe - Neutinamu Cafe & Receipt Styles === */
+
+.cafe-section-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 80px 24px 100px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.cafe-header {
+  text-align: center;
+}
+
+.cafe-subtitle {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--snu-gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.cafe-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.cafe-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Kiosk Layout */
+.kiosk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* Left: Order Form */
+.order-form-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-label .required-dot {
+  color: #ef4444;
+  font-size: 1rem;
+}
+
+.form-input, .form-select, .form-textarea {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #fff;
+  font-size: 0.92rem;
+  font-family: inherit;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--snu-gold);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 12px rgba(195, 158, 92, 0.25);
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+  color: #64748b;
+}
+
+/* Drink Showcase Chips */
+.drink-chips {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.drink-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  color: var(--text-main);
+  text-align: left;
+}
+
+.drink-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--glass-highlight);
+}
+
+.drink-chip.active {
+  background: rgba(195, 158, 92, 0.2);
+  border-color: var(--snu-gold);
+  color: #fef08a;
+}
+
+.drink-chip .icon {
+  font-size: 1.3rem;
+}
+
+.drink-chip .chip-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Condition Tags */
+.condition-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.condition-tag {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.condition-tag:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.condition-tag.active {
+  background: var(--accent-mint);
+  border-color: var(--accent-mint);
+  color: #042f2e;
+  font-weight: 700;
+}
+
+/* Order Submit Button */
+.btn-submit-order {
+  background: linear-gradient(135deg, #1e3a8a, #0f0f70);
+  border: 1px solid var(--snu-gold);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(15, 15, 112, 0.4);
+}
+
+.btn-submit-order:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(195, 158, 92, 0.35);
+}
+
+.btn-submit-order:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Right: Receipt Output & Preview */
+.receipt-preview-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+}
+
+/* Loading State Animation */
+.kiosk-loading-box {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.coffee-cup-loader {
+  font-size: 3.5rem;
+  animation: brewing 1.5s ease-in-out infinite;
+}
+
+@keyframes brewing {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(5deg); }
+}
+
+.loading-text {
+  font-size: 0.95rem;
+  color: var(--snu-gold);
+  font-weight: 600;
+}
+
+.loading-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Vintage Paper Receipt Card */
+.receipt-card {
+  width: 100%;
+  max-width: 360px;
+  background: #fbfbf8;
+  color: #1e293b;
+  border-radius: 4px;
+  padding: 24px 20px 32px 20px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  font-family: "Courier New", Courier, monospace, var(--font-family);
+  position: relative;
+  display: none;
+  animation: receiptSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes receiptSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Receipt Top Serrated Edge */
+.receipt-card::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: radial-gradient(circle, transparent, transparent 50%, #fbfbf8 50%, #fbfbf8 100%);
+  background-size: 16px 16px;
+}
+
+/* Receipt Bottom Serrated Edge */
+.receipt-card::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: radial-gradient(circle, transparent, transparent 50%, #fbfbf8 50%, #fbfbf8 100%);
+  background-size: 16px 16px;
+  transform: rotate(180deg);
+}
+
+.receipt-header {
+  text-align: center;
+  border-bottom: 1px dashed #cbd5e1;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.receipt-logo {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #0f172a;
+}
+
+.receipt-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 4px 0 2px 0;
+}
+
+.receipt-date {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.receipt-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.receipt-label {
+  color: #64748b;
+}
+
+.receipt-value {
+  font-weight: 700;
+  color: #0f172a;
+  text-align: right;
+  max-width: 60%;
+}
+
+.receipt-divider {
+  border-top: 1px dashed #cbd5e1;
+  margin: 4px 0;
+}
+
+.receipt-highlight-box {
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 4px 0;
+}
+
+.receipt-drink-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin-bottom: 2px;
+}
+
+.receipt-drink-tagline {
+  font-size: 0.78rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.receipt-motivation {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #0f172a;
+  background: #fff;
+  border-left: 3px solid #1e3a8a;
+  padding: 8px 10px;
+  border-radius: 4px;
+  margin-top: 6px;
+  font-style: normal;
+}
+
+.receipt-tip {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Receipt Barcode */
+.receipt-barcode {
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed #cbd5e1;
+}
+
+.barcode-lines {
+  height: 32px;
+  background: repeating-linear-gradient(
+    90deg,
+    #0f172a 0px,
+    #0f172a 2px,
+    transparent 2px,
+    transparent 4px,
+    #0f172a 4px,
+    #0f172a 7px,
+    transparent 7px,
+    transparent 9px
+  );
+  margin-bottom: 4px;
+}
+
+.barcode-num {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: #64748b;
+}
+
+/* Receipt Action Buttons */
+.receipt-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.btn-desk-deliver {
+  flex: 1;
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-desk-deliver:hover {
+  background: #1e3a8a;
+}
+
+.btn-receipt-copy {
+  background: #e2e8f0;
+  color: #1e293b;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-receipt-copy:hover {
+  background: #cbd5e1;
+}
+
+/* Responsive Cafe Layout */
+@media (max-width: 840px) {
+  .kiosk-grid {
+    grid-template-columns: 1fr;
+  }
+  .receipt-preview-panel {
+    min-height: auto;
+  }
+}
