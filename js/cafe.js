@@ -1,52 +1,53 @@
 /**
- * Neutinamu Cafe AI Ordering & Receipt Renderer
- * Gemini AI API 연동 및 디지털 감성 영수증 발행
+ * study with SNU - Cafe Kiosk & Receipt Controller
  */
 
-class NeutinamuCafe {
+class CafeController {
   constructor() {
-    this.selectedDrink = "리딸라 (리얼딸기라떼)";
-    this.selectedCondition = "피곤하고 당 충전 필요";
-    this.currentReceiptData = null;
+    this.selectedCondition = "🥱 피곤";
+    this.selectedMood = "집중";
+    this.selectedDrink = "리딸라";
+    this.currentReceipt = null;
 
-    // 느티나무 인기 음료 카탈로그 (Fallback 및 프리셋용)
-    this.drinkCatalog = {
-      "리딸라 (리얼딸기라떼)": {
-        icon: "🍓",
-        tagline: "서울대 느티나무의 영원한 1티어, 묵직한 생딸기와 우유의 당 충전 조합",
-        color: "#f43f5e"
-      },
-      "말차라떼": {
-        icon: "🍵",
-        tagline: "진한 말차 특유의 쌉싸름함으로 잡념을 가라앉히는 차분한 집중템",
-        color: "#10b981"
-      },
-      "아이스 아메리카노": {
-        icon: "☕",
-        tagline: "관정 열람실 밤샘러들의 생명수, 군더더기 없는 깔끔한 다크 로스팅",
-        color: "#78350f"
-      },
-      "카페라떼": {
-        icon: "🥛",
-        tagline: "부드러운 에스프레소와 고소한 스팀밀크로 지속적인 에너지를 주는 메뉴",
-        color: "#b45309"
-      },
-      "자몽허니블랙티": {
-        icon: "🍯",
-        tagline: "달콤 쌉싸름한 자몽과 홍차 향으로 나른한 오후를 깨우는 산뜻한 음료",
-        color: "#ea580c"
-      }
+    this.drinkIcons = {
+      "리딸라": "🍓",
+      "말차라떼": "🍵",
+      "아메리카노": "☕",
+      "카페라떼": "🥛",
+      "자몽허니티": "🍯"
     };
   }
 
   initUI() {
-    this.taskInput = document.getElementById("cafe-task-input");
-    this.orderBtn = document.getElementById("cafe-order-btn");
+    this.nameInput = document.getElementById("kiosk-name-input");
+    this.subjectInput = document.getElementById("kiosk-subject-input");
+    this.goalInput = document.getElementById("kiosk-goal-input");
+    this.orderBtn = document.getElementById("kiosk-order-btn");
     this.loadingBox = document.getElementById("kiosk-loading");
     this.receiptCard = document.getElementById("kiosk-receipt");
-    this.receiptPlaceholder = document.getElementById("receipt-empty-placeholder");
-    
-    // 음료 칩 선택 이벤트
+    this.receiptPlaceholder = document.getElementById("receipt-placeholder");
+
+    // 1. 컨디션 이모지 버튼 바인딩
+    const emojiBtns = document.querySelectorAll(".emoji-btn");
+    emojiBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        emojiBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        this.selectedCondition = btn.dataset.condition;
+      });
+    });
+
+    // 2. 무드 단어 칩 바인딩
+    const moodBtns = document.querySelectorAll(".mood-chip-btn");
+    moodBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        moodBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        this.selectedMood = btn.dataset.mood;
+      });
+    });
+
+    // 3. 음료 칩 바인딩
     const drinkChips = document.querySelectorAll(".drink-chip");
     drinkChips.forEach(chip => {
       chip.addEventListener("click", () => {
@@ -56,66 +57,51 @@ class NeutinamuCafe {
       });
     });
 
-    // 컨디션 태그 선택 이벤트
-    const conditionTags = document.querySelectorAll(".condition-tag");
-    conditionTags.forEach(tag => {
-      tag.addEventListener("click", () => {
-        conditionTags.forEach(t => t.classList.remove("active"));
-        tag.classList.add("active");
-        this.selectedCondition = tag.dataset.condition;
-      });
-    });
-
-    // 주문 버튼 클릭
+    // 4. 주문하기 버튼
     if (this.orderBtn) {
       this.orderBtn.addEventListener("click", () => this.handleOrder());
     }
 
-    // 영수증 액션 버튼들
+    // 5. 영수증 액션 버튼
     const deliverBtn = document.getElementById("receipt-deliver-btn");
     if (deliverBtn) {
-      deliverBtn.addEventListener("click", () => this.deliverDrinkToDesk());
+      deliverBtn.addEventListener("click", () => this.deliverToDesk());
     }
 
     const copyBtn = document.getElementById("receipt-copy-btn");
     if (copyBtn) {
-      copyBtn.addEventListener("click", () => this.copyReceiptText());
+      copyBtn.addEventListener("click", () => this.copyReceipt());
     }
   }
 
   async handleOrder() {
-    const task = this.taskInput ? this.taskInput.value.trim() : "";
+    const name = this.nameInput ? this.nameInput.value.trim() : "";
+    const subject = this.subjectInput ? this.subjectInput.value.trim() : "";
+    const goal = this.goalInput ? this.goalInput.value.trim() : "";
 
-    // 1. 과제 요구사항: 필수값 누락 (빈 입력) 예외 처리
-    if (!task) {
-      if (window.showToast) {
-        window.showToast("⚠️ 바리스타에게 오늘 어떤 공부를 할지 알려주세요!", "warning");
-      }
-      if (this.taskInput) {
-        this.taskInput.focus();
-        this.taskInput.style.borderColor = "#ef4444";
-        setTimeout(() => {
-          this.taskInput.style.borderColor = "";
-        }, 1500);
-      }
+    // 유효성 검사 (과목 또는 목표 누락 시)
+    if (!subject) {
+      if (window.showToast) window.showToast("⚠️ 공부할 과목을 적어주세요!", "warning");
+      if (this.subjectInput) this.subjectInput.focus();
       return;
     }
 
-    // 2. 과제 요구사항: 로딩 및 대기 상태 UI 표시
     this.setLoading(true);
 
     const payload = {
-      task: task,
+      name: name || "학우",
+      subject: subject,
+      goal: goal || "오늘 분량 끝내기",
       condition: this.selectedCondition,
+      mood: this.selectedMood,
       drinkPreference: this.selectedDrink
     };
 
     try {
-      // 8초 타임아웃 컨트롤러
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-      const response = await fetch("/api/order", {
+      const res = await fetch("/api/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -124,138 +110,94 @@ class NeutinamuCafe {
 
       clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        throw new Error(`API 응답 오류 (${response.status})`);
-      }
-
-      const data = await response.json();
-      this.renderReceipt(data, task);
-      if (window.showToast) {
-        window.showToast("🧾 느티나무 바리스타의 맞춤 주문서가 나왔습니다!", "success");
-      }
+      if (!res.ok) throw new Error("API Error");
+      const data = await res.json();
+      this.renderReceipt(data, payload);
+      if (window.showToast) window.showToast("🧾 주문서가 나왔어요!", "success");
     } catch (err) {
-      console.warn("AI API 응답 지연 또는 로컬 환경 fallback 작동:", err.message);
-      
-      // 3. 과제 요구사항: API 오류 및 타임아웃 실패 처리
-      if (window.showToast) {
-        if (err.name === 'AbortError') {
-          window.showToast("⏱️ 네트워크가 혼잡하여 바리스타의 추천 레시피로 준비했습니다.", "warning");
-        } else {
-          window.showToast("☕ 바리스타가 직접 블렌딩한 추천 음료로 준비해 드립니다.", "warning");
-        }
-      }
-
-      // 스마트 Fallback 데이터 생성 (흐름 중단 방지)
-      const fallbackData = this.generateFallbackResponse(payload);
-      this.renderReceipt(fallbackData, task);
+      // 스마트 Fallback
+      const fallback = {
+        orderNumber: "SNU-" + Math.floor(1000 + Math.random() * 9000),
+        recommendedDrink: payload.drinkPreference,
+        motivationMessage: `${payload.name}님, ${payload.subject} 몰입 준비 완료! 이번 25분 차분하게 달려봐요.`
+      };
+      this.renderReceipt(fallback, payload);
+      if (window.showToast) window.showToast("☕ 따뜻한 맞춤 주문서가 준비되었어요.", "success");
     } finally {
       this.setLoading(false);
     }
   }
 
   setLoading(isLoading) {
-    if (this.orderBtn) {
-      this.orderBtn.disabled = isLoading;
-    }
-    if (this.loadingBox) {
-      this.loadingBox.style.display = isLoading ? "flex" : "none";
-    }
+    if (this.orderBtn) this.orderBtn.disabled = isLoading;
+    if (this.loadingBox) this.loadingBox.style.display = isLoading ? "flex" : "none";
     if (isLoading) {
       if (this.receiptPlaceholder) this.receiptPlaceholder.style.display = "none";
       if (this.receiptCard) this.receiptCard.style.display = "none";
     }
   }
 
-  generateFallbackResponse(payload) {
-    const drinkInfo = this.drinkCatalog[payload.drinkPreference] || this.drinkCatalog["아이스 아메리카노"];
-    return {
-      recommendedDrink: payload.drinkPreference,
-      drinkTagline: drinkInfo.tagline,
-      motivationMessage: `"${payload.task}"을(를) 향한 첫 걸음입니다. 작은 몰입이 쌓여 커다란 성취가 됩니다. 조급해하지 말고 이번 25분에만 집중해 보세요.`,
-      studyTip: "첫 5분만 참고 집중하면 뇌의 작업흥분 상태가 켜져 몰입하기 쉬워집니다.",
-      orderNumber: "SNU-" + Math.floor(1000 + Math.random() * 9000)
-    };
-  }
+  renderReceipt(data, payload) {
+    this.currentReceipt = { ...data, ...payload };
 
-  renderReceipt(data, task) {
-    this.currentReceiptData = { ...data, task };
+    const drink = data.recommendedDrink || payload.drinkPreference;
+    const icon = this.drinkIcons[drink] || "☕";
 
-    const drink = data.recommendedDrink || this.selectedDrink;
-    const drinkMeta = this.drinkCatalog[drink] || { icon: "☕", color: "#3b82f6" };
+    const nameEl = document.getElementById("rc-name");
+    const subjEl = document.getElementById("rc-subject");
+    const goalEl = document.getElementById("rc-goal");
+    const moodEl = document.getElementById("rc-mood");
+    const drinkEl = document.getElementById("rc-drink");
+    const quoteEl = document.getElementById("rc-quote");
+    const dateEl = document.getElementById("rc-date");
 
-    const orderNumEl = document.getElementById("receipt-order-no");
-    const taskEl = document.getElementById("receipt-task-text");
-    const conditionEl = document.getElementById("receipt-condition-text");
-    const drinkNameEl = document.getElementById("receipt-drink-name");
-    const drinkTaglineEl = document.getElementById("receipt-drink-tagline");
-    const motivationEl = document.getElementById("receipt-motivation-quote");
-    const tipEl = document.getElementById("receipt-study-tip");
-    const dateEl = document.getElementById("receipt-timestamp");
-
-    if (orderNumEl) orderNumEl.textContent = data.orderNumber || "SNU-" + Math.floor(1000 + Math.random() * 9000);
-    if (taskEl) taskEl.textContent = task;
-    if (conditionEl) conditionEl.textContent = this.selectedCondition;
-    if (drinkNameEl) drinkNameEl.textContent = `${drinkMeta.icon} ${drink}`;
-    if (drinkTaglineEl) drinkTaglineEl.textContent = data.drinkTagline || "";
-    if (motivationEl) motivationEl.textContent = `"${data.motivationMessage || "오늘의 몰입을 응원합니다."}"`;
-    if (tipEl) tipEl.textContent = `💡 팁: ${data.studyTip || "25분 집중 후 5분 쉬어가기"}`;
+    if (nameEl) nameEl.textContent = payload.name;
+    if (subjEl) subjEl.textContent = payload.subject;
+    if (goalEl) goalEl.textContent = payload.goal;
+    if (moodEl) moodEl.textContent = `${payload.condition} · ${payload.mood}`;
+    if (drinkEl) drinkEl.textContent = `${icon} ${drink}`;
+    if (quoteEl) quoteEl.textContent = `"${data.motivationMessage}"`;
 
     if (dateEl) {
       const now = new Date();
-      dateEl.textContent = now.toLocaleDateString("ko-KR") + " " + now.toLocaleTimeString("ko-KR", { hour: '2-digit', minute: '2-digit' });
+      dateEl.textContent = `${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
     }
 
     if (this.receiptPlaceholder) this.receiptPlaceholder.style.display = "none";
     if (this.receiptCard) this.receiptCard.style.display = "block";
   }
 
-  // 주문한 음료를 메인 데스크(섹션 1)에 배치하고 데스크 화면으로 이동
-  deliverDrinkToDesk() {
-    if (!this.currentReceiptData) return;
+  // 가운데 하단 커피 오브젝트로 배달
+  deliverToDesk() {
+    if (!this.currentReceipt) return;
 
-    const deskSlot = document.getElementById("desk-drink-slot");
-    const emptyState = document.getElementById("desk-drink-empty");
-    const activeDrink = document.getElementById("desk-drink-active");
+    const icon = this.drinkIcons[this.currentReceipt.recommendedDrink] || "☕";
+    const mugIconEl = document.getElementById("desk-coffee-icon");
+    const mugLabelEl = document.getElementById("desk-coffee-label");
+    const bubbleEl = document.getElementById("desk-coffee-bubble");
+    const steamEl = document.getElementById("desk-coffee-steam");
 
-    const drinkMeta = this.drinkCatalog[this.currentReceiptData.recommendedDrink] || { icon: "☕" };
+    if (mugIconEl) mugIconEl.textContent = icon;
+    if (mugLabelEl) mugLabelEl.textContent = this.currentReceipt.recommendedDrink;
+    if (bubbleEl) bubbleEl.textContent = `"${this.currentReceipt.motivationMessage}"`;
+    if (steamEl) steamEl.style.display = "block";
 
-    if (emptyState) emptyState.style.display = "none";
-    if (activeDrink) {
-      activeDrink.style.display = "flex";
-      const iconEl = document.getElementById("desk-active-icon");
-      const nameEl = document.getElementById("desk-active-name");
-      const quoteEl = document.getElementById("desk-active-quote");
-
-      if (iconEl) iconEl.textContent = drinkMeta.icon;
-      if (nameEl) nameEl.textContent = this.currentReceiptData.recommendedDrink;
-      if (quoteEl) quoteEl.textContent = `"${this.currentReceiptData.motivationMessage}"`;
-    }
-
-    if (window.showToast) {
-      window.showToast("🍹 주문하신 음료가 스터디 데스크에 놓였습니다!", "success");
-    }
-
-    // 1번 탭(스터디 데스크)으로 자동 이동
-    if (window.switchSection) {
-      window.switchSection("desk");
-    }
+    if (window.showToast) window.showToast("🍹 책상 가운데로 음료를 놓았어요!", "success");
+    if (window.switchSection) window.switchSection("desk");
   }
 
-  copyReceiptText() {
-    if (!this.currentReceiptData) return;
-    const text = `[🏛️ 서울대 느티나무 카공 영수증]
-• 과목: ${this.currentReceiptData.task}
-• 맞춤 음료: ${this.currentReceiptData.recommendedDrink}
-• 응원 한마디: "${this.currentReceiptData.motivationMessage}"
-#서울대카공 #뽀모도로 #SNUStudyCafe`;
+  copyReceipt() {
+    if (!this.currentReceipt) return;
+    const text = `[🏛️ study with SNU 영수증]
+• 이름: ${this.currentReceipt.name}
+• 과목: ${this.currentReceipt.subject} (${this.currentReceipt.goal})
+• 음료: ${this.currentReceipt.recommendedDrink}
+• 응원: "${this.currentReceipt.motivationMessage}"`;
 
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) {
-        window.showToast("📋 영수증 내용이 클립보드에 복사되었습니다!", "success");
-      }
+      if (window.showToast) window.showToast("📋 영수증이 복사되었어요!", "success");
     });
   }
 }
 
-window.neutinamuCafe = new NeutinamuCafe();
-
+window.cafeController = new CafeController();

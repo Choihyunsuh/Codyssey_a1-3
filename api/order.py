@@ -4,36 +4,29 @@ import urllib.request
 import urllib.error
 from http.server import BaseHTTPRequestHandler
 
-# 서울대학교 느티나무 인기 음료 및 메타데이터
-NEUTINAMU_MENU = {
-    "리딸라 (리얼딸기라떼)": "서울대 느티나무의 시그니처 1티어 음료. 묵직한 생딸기 청과 신선한 우유의 달콤한 당 충전 조합",
-    "말차라떼": "진하고 쌉싸름한 녹차 풍미로 차분하게 마음을 가라앉히고 잡념을 없애주는 힐링 메뉴",
-    "아이스 아메리카노": "관정 열람실 밤샘러들의 든든한 동반자. 군더더기 없이 깔끔하고 진한 다크 로스팅 카페인 부스터",
-    "카페라떼": "부드러운 에스프레소와 고소한 스팀 밀크로 장시간 지속되는 몰입을 돕는 스테디셀러",
-    "자몽허니블랙티": "달콤 쌉싸름한 자몽과 은은한 홍차 향으로 나른해진 오후를 상쾌하게 깨워주는 산뜻한 메뉴"
-}
+POPULAR_DRINKS = ["리딸라", "말차라떼", "아메리카노", "카페라떼", "자몽허니티"]
 
-def call_gemini(task, condition, drink_preference):
-    """Google Gemini API를 호출하여 맞춤 추천 및 응원 문구를 생성합니다."""
+def call_gemini(name, subject, goal, condition, mood, drink_pref):
+    """Google Gemini API (gemini-3.5-flash-lite) 호출"""
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         return None
 
-    # 프롬프트 구성 ('관악선배' 호칭 전면 배제, 담백하고 따뜻한 바리스타 감성)
     system_instruction = (
-        "당신은 서울대학교 교내 카페 '느티나무'의 친절하고 센스 있는 AI 바리스타입니다. "
-        "사용자의 공부 과목과 현재 컨디션을 고려하여, 느티나무 카페의 인기 음료 중 가장 알맞은 것을 추천하고, "
-        "담백하고 따뜻한 동기부여 응원 멘트(2~3문장)와 집중 팁(1문장)을 작성해주세요. "
-        "주의: '선배', '관악선배', '후배' 같은 호칭은 절대 사용하지 마세요. "
-        "반드시 순수한 JSON 형식으로만 응답해야 합니다. 다른 텍스트는 일체 출력하지 마세요.\n"
-        "응답 형식: {\"recommendedDrink\": \"음료명\", \"drinkTagline\": \"음료 한줄설명\", \"motivationMessage\": \"응원멘트\", \"studyTip\": \"팁\"}"
+        "당신은 서울대 학생들을 위한 디지털 카공 서비스 'study with SNU'의 친절하고 다정한 AI 바리스타입니다. "
+        "사용자의 이름, 공부 과목, 세부 목표, 컨디션, 원하는 무드를 바탕으로, "
+        "따뜻하고 담백한 손글씨 느낌의 응원 멘트(1~2문장)를 작성해 주세요. "
+        "주의: '선배', '관악선배', '후배' 호칭은 절대 쓰지 말고, 사용자 이름(예: 00님)을 부르며 다정하게 격려해주세요. "
+        "반드시 JSON 형식으로만 응답해야 합니다: {\"recommendedDrink\": \"음료명\", \"motivationMessage\": \"응원문구\"}"
     )
 
     user_prompt = (
-        f"공부 과목/목표: {task}\n"
+        f"이름: {name}\n"
+        f"공부 과목: {subject}\n"
+        f"세부 목표: {goal}\n"
         f"현재 컨디션: {condition}\n"
-        f"희망 음료 베이스: {drink_preference}\n"
-        f"선택 가능한 느티나무 메뉴: {', '.join(NEUTINAMU_MENU.keys())}"
+        f"원하는 무드: {mood}\n"
+        f"선택한 음료: {drink_pref}"
     )
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key={api_key}"
@@ -66,7 +59,6 @@ def call_gemini(task, condition, drink_preference):
 
 class handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
-        # CORS 사전 요청 대응
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
@@ -80,41 +72,33 @@ class handler(BaseHTTPRequestHandler):
         try:
             data = json.loads(post_data.decode("utf-8"))
         except Exception:
-            self.send_error_response(400, "잘못된 JSON 요청 형식입니다.")
+            self.send_error_response(400, "잘못된 JSON 형식입니다.")
             return
 
-        task = data.get("task", "").strip()
-        condition = data.get("condition", "피곤함").strip()
-        drink_pref = data.get("drinkPreference", "아이스 아메리카노").strip()
+        name = data.get("name", "학우").strip()
+        subject = data.get("subject", "").strip()
+        goal = data.get("goal", "").strip()
+        condition = data.get("condition", "피곤").strip()
+        mood = data.get("mood", "집중").strip()
+        drink_pref = data.get("drinkPreference", "아메리카노").strip()
 
-        # 필수값 누락 검증 (과제 요구사항)
-        if not task:
-            self.send_error_response(400, "오늘 집중할 과목이나 목표를 입력해주세요.")
+        if not subject:
+            self.send_error_response(400, "공부할 과목을 입력해주세요.")
             return
 
-        # Gemini API 호출 시도
         ai_result = None
         try:
-            ai_result = call_gemini(task, condition, drink_pref)
+            ai_result = call_gemini(name, subject, goal, condition, mood, drink_pref)
         except Exception as e:
-            # 로깅 후 지능형 Fallback으로 계속 진행
             print(f"[Gemini API Warning]: {e}")
 
-        # AI 결과가 없거나 실패한 경우 Fallback 응답 구성
         if not ai_result or not isinstance(ai_result, dict):
-            matched_drink = drink_pref if drink_pref in NEUTINAMU_MENU else "리딸라 (리얼딸기라떼)"
+            matched_drink = drink_pref if drink_pref in POPULAR_DRINKS else "리딸라"
             ai_result = {
                 "recommendedDrink": matched_drink,
-                "drinkTagline": NEUTINAMU_MENU.get(matched_drink, "느티나무의 대표 인기 음료"),
-                "motivationMessage": f"'{task}'을(를) 향한 첫 걸음을 응원합니다. 작은 몰입의 순간들이 쌓여 값진 성취가 됩니다. 이번 25분만큼은 눈앞의 한 걸음에만 집중해 보세요.",
-                "studyTip": "첫 5분 동안 뇌가 시동을 걸 수 있도록 책상 위 불필요한 물건을 정리해보세요."
+                "motivationMessage": f"{name}님, {subject} 몰입 준비 완료! 이번 25분 차분하게 달려봐요."
             }
 
-        # 주문 번호 생성
-        import random
-        ai_result["orderNumber"] = f"SNU-{random.randint(1000, 9999)}"
-
-        # 200 OK 응답 반환
         response_bytes = json.dumps(ai_result, ensure_ascii=False).encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -131,4 +115,3 @@ class handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(error_body)))
         self.end_headers()
         self.wfile.write(error_body)
-

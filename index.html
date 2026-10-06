@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>SNU Study Cafe | 서울대 카공 뽀모도로</title>
-  <meta name="description" content="언제 어디서나 서울대 캠퍼스 명소의 앰비언트 영상과 사운드 속에서 몰입하는 카공 뽀모도로">
+  <title>study with SNU</title>
+  <meta name="description" content="서울대 명소의 앰비언트 영상과 전용 사운드 속에서 몰입하는 카공 뽀모도로">
   
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
@@ -13,336 +13,233 @@
 </head>
 <body>
   <div id="app">
-    <!-- Top Global Navigation -->
+    <!-- Top Global Navbar -->
     <header class="navbar">
       <a href="#" class="brand" onclick="window.switchSection('desk'); return false;">
-        <span class="brand-badge">SNU</span>
-        <div class="brand-title">Study Cafe <span>뽀모도로</span></div>
+        <span class="brand-doodle-star">✦</span>
+        <div class="brand-title">study with SNU</div>
       </a>
 
       <!-- Desktop Nav Tabs -->
       <nav class="nav-tabs">
         <button class="nav-tab-btn active" data-section="desk">
-          <span>🏛️ 스터디 데스크</span>
+          <span>🏛️ 데스크</span>
         </button>
         <button class="nav-tab-btn" data-section="cafe">
-          <span>☕ 느티나무 카운터</span>
+          <span>☕ 주문하기</span>
         </button>
         <button class="nav-tab-btn" data-section="guide">
-          <span>📖 캠퍼스 도감</span>
+          <span>📖 스팟</span>
         </button>
       </nav>
 
       <!-- Nav Right Utilities -->
       <div class="nav-actions">
-        <button class="icon-btn" id="fullscreen-btn" title="전체화면 전환">⛶</button>
+        <div class="sound-quick-control" title="볼륨 조절">
+          <button class="sound-mute-btn" id="quick-mute-btn">🔊</button>
+          <input type="range" class="quick-vol-slider" id="quick-vol-slider" min="0" max="1" step="0.05" value="0.6">
+        </div>
       </div>
     </header>
 
     <!-- Main Content Area -->
     <main>
       <!-- ==============================================
-           SECTION 1: STUDY DESK (Main Interactive Screen)
+           SECTION 1: STUDY DESK (Main Open Canvas)
            ============================================== -->
       <section id="section-desk" class="app-section active">
-        <!-- Fullscreen Ambient Video Background -->
+        <!-- Ambient Background Video -->
         <div class="bg-video-container">
           <video id="bg-video" autoplay loop muted playsinline></video>
           <div class="bg-overlay"></div>
         </div>
 
-        <div class="desk-layout">
-          <!-- Left Panel: 4 Spots & Ambient Audio Mixer -->
-          <aside class="desk-left-panel">
-            <!-- Spot Selector -->
-            <div class="glass-panel">
-              <div class="panel-header">
-                <div class="panel-title"><span>📍</span> 서울대 4대 스팟</div>
-              </div>
-              <div class="spot-list">
-                <div class="spot-card active" data-spot="jahayeon">
-                  <div class="spot-info">
-                    <h4>자하연</h4>
-                    <p>연못 물결 & 사색의 힐링 뷰</p>
-                  </div>
-                  <span class="spot-badge">명소 1</span>
-                </div>
-                <div class="spot-card" data-spot="grass-square">
-                  <div class="spot-info">
-                    <h4>잔디광장</h4>
-                    <p>버들골의 탁 트인 개방감</p>
-                  </div>
-                  <span class="spot-badge">명소 2</span>
-                </div>
-                <div class="spot-card" data-spot="kwanjeong">
-                  <div class="spot-info">
-                    <h4>관정도서관</h4>
-                    <p>모던 서가 & 초집중 열람실</p>
-                  </div>
-                  <span class="spot-badge">명소 3</span>
-                </div>
-                <div class="spot-card" data-spot="bldg16-lounge">
-                  <div class="spot-info">
-                    <h4>사회대 16동 라운지</h4>
-                    <p>통창 너머 관악산 뷰 & 카페</p>
-                  </div>
-                  <span class="spot-badge">명소 4</span>
-                </div>
-              </div>
+        <div class="desk-viewport">
+          <!-- TOP: Mini Pomodoro Widget -->
+          <div class="mini-pomodoro-widget">
+            <div class="mini-timer-modes">
+              <button class="mini-mode-btn active" data-mode="focus">25분</button>
+              <button class="mini-mode-btn" data-mode="shortBreak">5분</button>
+              <button class="mini-mode-btn" data-mode="longBreak">15분</button>
             </div>
 
-            <!-- Ambient Sound Mixer -->
-            <div class="glass-panel">
-              <div class="panel-header">
-                <div class="panel-title"><span>🎧</span> 앰비언트 백색소음</div>
-              </div>
-              <div class="audio-mixer">
-                <div class="sound-row" data-sound="water">
-                  <div class="sound-label"><span>🌊</span> 물소리</div>
-                  <input type="range" class="volume-slider" min="0" max="1" step="0.05" value="0.5">
-                  <button class="sound-toggle-btn">+</button>
-                </div>
-                <div class="sound-row" data-sound="rain">
-                  <div class="sound-label"><span>🌧️</span> 빗소리</div>
-                  <input type="range" class="volume-slider" min="0" max="1" step="0.05" value="0.5">
-                  <button class="sound-toggle-btn">+</button>
-                </div>
-                <div class="sound-row" data-sound="library">
-                  <div class="sound-label"><span>📚</span> 도서관</div>
-                  <input type="range" class="volume-slider" min="0" max="1" step="0.05" value="0.5">
-                  <button class="sound-toggle-btn">+</button>
-                </div>
-                <div class="sound-row" data-sound="cafe">
-                  <div class="sound-label"><span>☕</span> 카페 소음</div>
-                  <input type="range" class="volume-slider" min="0" max="1" step="0.05" value="0.5">
-                  <button class="sound-toggle-btn">+</button>
-                </div>
-              </div>
+            <div class="mini-timer-display">
+              <div class="mini-time-text" id="mini-time-text">25:00</div>
             </div>
-          </aside>
 
-          <!-- Center Panel: Pomodoro Master Desk -->
-          <div class="desk-center-panel">
-            <div class="glass-panel pomodoro-card">
-              <!-- Task Goal -->
-              <div class="task-badge-wrap">
-                <input type="text" class="task-input-pill" id="desk-task-input" placeholder="✏️ 오늘 집중할 과목이나 과제를 입력하세요" value="서울대 카공 집중 모드">
-              </div>
-
-              <!-- Mode Switcher -->
-              <div class="timer-mode-group">
-                <button class="mode-btn active" data-mode="focus">집중 25분</button>
-                <button class="mode-btn" data-mode="shortBreak">짧은 휴식 5분</button>
-                <button class="mode-btn" data-mode="longBreak">긴 휴식 15분</button>
-              </div>
-
-              <!-- Circular Progress & Time Display -->
-              <div class="timer-ring-container">
-                <svg class="timer-svg" viewBox="0 0 240 240">
-                  <circle class="ring-bg" cx="120" cy="120" r="110" />
-                  <circle class="ring-progress" id="timer-ring-progress" cx="120" cy="120" r="110" />
-                </svg>
-                <div class="timer-inner">
-                  <div class="timer-time" id="timer-time">25:00</div>
-                  <div class="timer-status-badge" id="timer-status-badge">집중 시간</div>
-                </div>
-              </div>
-
-              <!-- Controls -->
-              <div class="timer-controls">
-                <button class="btn-secondary-action" id="timer-reset-btn" title="타이머 리셋">↺</button>
-                <button class="btn-primary-action" id="timer-start-btn">
-                  <span>▶ 시작하기</span>
-                </button>
-              </div>
+            <div class="mini-timer-actions">
+              <button class="mini-action-btn" id="mini-start-btn">시작</button>
+              <button class="mini-reset-btn" id="mini-reset-btn" title="리셋">↺</button>
             </div>
           </div>
 
-          <!-- Right Panel: Desk Companion (Ordered Drink & Stats) -->
-          <aside class="desk-right-panel">
-            <!-- Drink on the Desk -->
-            <div class="glass-panel drink-companion-card" id="desk-drink-slot">
-              <div class="panel-header" style="justify-content: center; margin-bottom: 8px;">
-                <div class="panel-title"><span>🥤</span> 책상 위 음료</div>
-              </div>
-
-              <div id="desk-drink-empty" class="drink-empty-state">
-                <div class="drink-empty-icon">☕</div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">아직 주문한 음료가 없습니다.</p>
-                <button class="btn-order-shortcut" id="desk-order-shortcut-btn">느티나무 주문하기 →</button>
-              </div>
-
-              <div id="desk-drink-active" class="active-drink-slot" style="display: none;">
-                <div class="drink-cup-icon" id="desk-active-icon">🍓</div>
-                <div class="active-drink-name" id="desk-active-name">리딸라 (리얼딸기라떼)</div>
-                <div class="desk-motivation-quote" id="desk-active-quote">
-                  "지친 뇌세포에 달콤한 당 충전이 필요한 순간입니다."
-                </div>
-              </div>
+          <!-- BOTTOM CENTER: Hand-drawn Coffee Mug & Speech Bubble -->
+          <div class="desk-coffee-center">
+            <div class="coffee-speech-bubble" id="desk-coffee-bubble">
+              "따뜻한 음료 한 잔과 함께 몰입해 볼까요?"
             </div>
 
-            <!-- Today's Stats -->
-            <div class="glass-panel">
-              <div class="panel-header">
-                <div class="panel-title"><span>📊</span> 오늘의 몰입 기록</div>
+            <div class="coffee-mug-wrapper" id="desk-center-coffee" title="주문하러 가기">
+              <div class="coffee-cup-graphic">
+                <span class="coffee-steam" id="desk-coffee-steam" style="display: none;">♨</span>
+                <span id="desk-coffee-icon">☕</span>
               </div>
-              <div class="today-stats">
-                <div class="stat-item">
-                  <div class="stat-num" id="stat-pomo-count">0회</div>
-                  <div class="stat-label">달성 뽀모도로</div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-num" id="stat-pomo-minutes">0분</div>
-                  <div class="stat-label">총 집중 시간</div>
-                </div>
-              </div>
+              <div class="coffee-cup-label" id="desk-coffee-label">음료 주문하기 ✦</div>
             </div>
-          </aside>
+          </div>
+
+          <!-- BOTTOM ROW: Spot Stamps & Daily Badge -->
+          <div class="desk-bottom-row">
+            <!-- Left: Spot Stamps (No long text) -->
+            <div class="spot-stamps">
+              <button class="spot-stamp-btn active" data-spot="jahayeon">🌊 자하연</button>
+              <button class="spot-stamp-btn" data-spot="grass-square">🌿 잔디광장</button>
+              <button class="spot-stamp-btn" data-spot="kwanjeong">📚 관정도서관</button>
+              <button class="spot-stamp-btn" data-spot="bldg16-lounge">☕ 사회대 16동</button>
+            </div>
+
+            <!-- Right: Daily Streak Badge -->
+            <div class="daily-streak-stamp">
+              <span>🍅</span>
+              <span id="daily-pomo-badge">0개 완료</span>
+            </div>
+          </div>
         </div>
       </section>
 
       <!-- ==============================================
-           SECTION 2: NEUTINAMU CAFE COUNTER (AI Ordering)
+           SECTION 2: CAFE ORDERING KIOSK
            ============================================== -->
       <section id="section-cafe" class="app-section">
         <div class="cafe-section-container">
           <div class="cafe-header">
-            <div class="cafe-subtitle">Neutinamu Cafe & Kiosk</div>
-            <h2 class="cafe-title">느티나무 카페 카운터</h2>
-            <p class="cafe-desc">
-              공부할 과목과 현재 컨디션을 알려주시면, Gemini AI가 느티나무 인기 메뉴 중 최적의 음료와 따뜻한 동기부여 영수증을 발행해 드립니다.
-            </p>
+            <h2 class="cafe-title">
+              <span class="doodle-star">✦</span> 카페 주문서 <span class="doodle-star">✦</span>
+            </h2>
+            <p class="cafe-desc">오늘의 몰입을 위한 맞춤 음료와 응원 영수증을 적어드려요.</p>
           </div>
 
           <div class="kiosk-grid">
-            <!-- Left: Ordering Kiosk Form -->
-            <div class="glass-panel order-form-panel">
-              <div class="panel-title" style="margin-bottom: 4px;">
-                <span>📋</span> 키오스크 주문서 작성
-              </div>
-
-              <!-- Task Input -->
-              <div class="form-group">
-                <label class="form-label" for="cafe-task-input">
-                  오늘 집중할 과목 / 목표 <span class="required-dot">*</span>
-                </label>
-                <input type="text" id="cafe-task-input" class="form-input" placeholder="예: 경제학원론 과제, 알고리즘 문제 풀이, 영어 에세이">
-              </div>
-
-              <!-- Condition Tags -->
-              <div class="form-group">
-                <label class="form-label">
-                  현재 나의 컨디션 <span class="required-dot">*</span>
-                </label>
-                <div class="condition-tags">
-                  <button type="button" class="condition-tag active" data-condition="피곤하고 당 충전 필요">🥱 피곤함 & 당 충전</button>
-                  <button type="button" class="condition-tag" data-condition="의욕 충만 & 초집중">🔥 의욕 충만 & 몰입</button>
-                  <button type="button" class="condition-tag" data-condition="머릿속 복잡 & 힐링 필요">🌿 잡념 정리 & 힐링</button>
-                  <button type="button" class="condition-tag" data-condition="시험/마감 직전 긴장됨">⚡ 마감 직전 긴급 모드</button>
+            <!-- Left: Form -->
+            <div class="order-form-panel">
+              <!-- Name & Subject -->
+              <div class="form-row-2col">
+                <div class="form-group">
+                  <label class="form-label" for="kiosk-name-input">이름 (닉네임)</label>
+                  <input type="text" id="kiosk-name-input" class="form-input" placeholder="학우" value="현서">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="kiosk-subject-input">과목 *</label>
+                  <input type="text" id="kiosk-subject-input" class="form-input" placeholder="예: 미적분학, 디자인">
                 </div>
               </div>
 
-              <!-- Drink Preference Chips -->
+              <!-- Goal -->
               <div class="form-group">
-                <label class="form-label">
-                  느티나무 인기 음료 선택 (원하는 베이스)
-                </label>
-                <div class="drink-chips">
-                  <div class="drink-chip active" data-drink="리딸라 (리얼딸기라떼)">
-                    <span class="icon">🍓</span>
-                    <span class="chip-name">리딸라 (딸기라떼)</span>
-                  </div>
-                  <div class="drink-chip" data-drink="말차라떼">
-                    <span class="icon">🍵</span>
-                    <span class="chip-name">말차라떼</span>
-                  </div>
-                  <div class="drink-chip" data-drink="아이스 아메리카노">
-                    <span class="icon">☕</span>
-                    <span class="chip-name">아이스 아메리카노</span>
-                  </div>
-                  <div class="drink-chip" data-drink="카페라떼">
-                    <span class="icon">🥛</span>
-                    <span class="chip-name">카페라떼</span>
-                  </div>
-                  <div class="drink-chip" data-drink="자몽허니블랙티">
-                    <span class="icon">🍯</span>
-                    <span class="chip-name">자몽허니블랙티</span>
-                  </div>
+                <label class="form-label" for="kiosk-goal-input">오늘의 세부 목표</label>
+                <input type="text" id="kiosk-goal-input" class="form-input" placeholder="예: 과제 3번 풀기, 1챕터 정독">
+              </div>
+
+              <!-- Condition (Emoji-centric) -->
+              <div class="form-group">
+                <label class="form-label">지금 컨디션</label>
+                <div class="emoji-condition-group">
+                  <button type="button" class="emoji-btn active" data-condition="🥱 피곤">
+                    <span class="icon">🥱</span>
+                    <span>피곤</span>
+                  </button>
+                  <button type="button" class="emoji-btn" data-condition="🔥 열정">
+                    <span class="icon">🔥</span>
+                    <span>열정</span>
+                  </button>
+                  <button type="button" class="emoji-btn" data-condition="🌿 차분">
+                    <span class="icon">🌿</span>
+                    <span>차분</span>
+                  </button>
+                  <button type="button" class="emoji-btn" data-condition="⚡ 급함">
+                    <span class="icon">⚡</span>
+                    <span>급함</span>
+                  </button>
                 </div>
               </div>
 
-              <!-- Submit Button -->
-              <button class="btn-submit-order" id="cafe-order-btn">
-                <span>🧾 AI 맞춤 음료 & 동기부여 영수증 발행하기</span>
+              <!-- Mood (Single word) -->
+              <div class="form-group">
+                <label class="form-label">원하는 무드</label>
+                <div class="mood-chips-group">
+                  <button type="button" class="mood-chip-btn active" data-mood="집중">집중</button>
+                  <button type="button" class="mood-chip-btn" data-mood="마감">마감</button>
+                  <button type="button" class="mood-chip-btn" data-mood="힐링">힐링</button>
+                  <button type="button" class="mood-chip-btn" data-mood="독서">독서</button>
+                </div>
+              </div>
+
+              <!-- Drinks (Clean chips) -->
+              <div class="form-group">
+                <label class="form-label">음료 선택</label>
+                <div class="drink-chips-grid">
+                  <div class="drink-chip active" data-drink="리딸라">🍓 리딸라</div>
+                  <div class="drink-chip" data-drink="말차라떼">🍵 말차라떼</div>
+                  <div class="drink-chip" data-drink="아메리카노">☕ 아메리카노</div>
+                  <div class="drink-chip" data-drink="카페라떼">🥛 카페라떼</div>
+                  <div class="drink-chip" data-drink="자몽허니티">🍯 자몽허니티</div>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button class="btn-submit-order" id="kiosk-order-btn">
+                <span>영수증 발행하기 ✦</span>
               </button>
             </div>
 
-            <!-- Right: Receipt Output & Loading Preview -->
-            <div class="glass-panel receipt-preview-panel">
-              <!-- Placeholder State -->
-              <div id="receipt-empty-placeholder" style="text-align: center; color: var(--text-muted);">
-                <div style="font-size: 3rem; margin-bottom: 12px; opacity: 0.5;">🧾</div>
-                <div style="font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 4px;">주문서가 아직 발행되지 않았습니다.</div>
-                <p style="font-size: 0.82rem;">좌측 키오스크에서 과목과 컨디션을 선택 후 주문해 보세요.</p>
+            <!-- Right: Receipt Card -->
+            <div class="receipt-preview-panel">
+              <div id="receipt-placeholder" style="text-align: center; color: var(--ink-muted);">
+                <div style="font-size: 2.8rem; margin-bottom: 6px;">🧾</div>
+                <p style="font-size: 1.15rem;">주문서를 작성하면 영수증이 나와요.</p>
               </div>
 
-              <!-- Loading State -->
               <div class="kiosk-loading-box" id="kiosk-loading">
                 <div class="coffee-cup-loader">☕</div>
-                <div class="loading-text">느티나무 바리스타가 원두를 내리고 있습니다...</div>
-                <div class="loading-sub">Gemini AI가 목표에 꼭 맞는 음료와 응원 영수증을 작성 중입니다.</div>
+                <div class="loading-text">바리스타가 영수증을 적고 있어요...</div>
               </div>
 
-              <!-- Vintage Receipt Ticket Card -->
               <div class="receipt-card" id="kiosk-receipt">
                 <div class="receipt-header">
-                  <div class="receipt-logo">★ SNU NEUTINAMU CAFE ★</div>
-                  <div class="receipt-title">카공 동기부여 영수증</div>
-                  <div class="receipt-date" id="receipt-timestamp">2026. 10. 06 17:50</div>
+                  <div class="receipt-logo">★ study with SNU ★</div>
+                  <div class="receipt-date" id="rc-date">10/6 18:30</div>
                 </div>
 
                 <div class="receipt-body">
                   <div class="receipt-row">
-                    <span class="receipt-label">주문 번호</span>
-                    <span class="receipt-value" id="receipt-order-no">SNU-7429</span>
+                    <span class="receipt-label">NAME</span>
+                    <span class="receipt-value" id="rc-name">현서</span>
                   </div>
                   <div class="receipt-row">
-                    <span class="receipt-label">오늘의 목표</span>
-                    <span class="receipt-value" id="receipt-task-text">미적분학 과제 풀기</span>
+                    <span class="receipt-label">SUBJECT</span>
+                    <span class="receipt-value" id="rc-subject">미적분학</span>
                   </div>
                   <div class="receipt-row">
-                    <span class="receipt-label">컨디션</span>
-                    <span class="receipt-value" id="receipt-condition-text">피곤함 & 당 충전</span>
+                    <span class="receipt-label">GOAL</span>
+                    <span class="receipt-value" id="rc-goal">과제 3번 풀기</span>
                   </div>
-
-                  <div class="receipt-divider"></div>
+                  <div class="receipt-row">
+                    <span class="receipt-label">MOOD</span>
+                    <span class="receipt-value" id="rc-mood">🥱 피곤 · 집중</span>
+                  </div>
 
                   <div class="receipt-highlight-box">
-                    <div class="receipt-label" style="font-size: 0.72rem; margin-bottom: 2px;">RECOMMENDED DRINK</div>
-                    <div class="receipt-drink-name" id="receipt-drink-name">🍓 리딸라 (리얼딸기라떼)</div>
-                    <div class="receipt-drink-tagline" id="receipt-drink-tagline">
-                      서울대 느티나무의 1티어, 생딸기와 우유의 묵직한 당 충전 조합
-                    </div>
+                    <div class="receipt-drink-name" id="rc-drink">🍓 리딸라</div>
                   </div>
 
-                  <div class="receipt-motivation" id="receipt-motivation-quote">
-                    "작은 몰입이 쌓여 커다란 성취가 됩니다. 이번 25분만큼은 조급해하지 말고 눈앞의 문제 하나에만 집중해 보세요."
-                  </div>
-
-                  <div class="receipt-tip" id="receipt-study-tip">
-                    💡 팁: 첫 5분만 참고 집중하면 뇌의 작업흥분 상태가 켜져 몰입하기 쉬워집니다.
-                  </div>
-
-                  <div class="receipt-barcode">
-                    <div class="barcode-lines"></div>
-                    <div class="barcode-num">||||| 8809 1015 2026 |||||</div>
+                  <div class="receipt-motivation" id="rc-quote">
+                    "오늘의 작은 몰입이 멋진 성취가 될 거예요. 화이팅!"
                   </div>
                 </div>
 
-                <!-- Receipt Actions -->
                 <div class="receipt-actions">
-                  <button class="btn-desk-deliver" id="receipt-deliver-btn">🍹 내 책상으로 음료 가져가기</button>
-                  <button class="btn-receipt-copy" id="receipt-copy-btn" title="영수증 복사">📋 복사</button>
+                  <button class="btn-desk-deliver" id="receipt-deliver-btn">책상으로 가져가기 ✦</button>
+                  <button class="btn-receipt-copy" id="receipt-copy-btn">복사</button>
                 </div>
               </div>
             </div>
@@ -351,91 +248,48 @@
       </section>
 
       <!-- ==============================================
-           SECTION 3: CAMPUS GUIDE & SPOTS
+           SECTION 3: SPOTS GALLERY (Clean Postcard Style)
            ============================================== -->
       <section id="section-guide" class="app-section">
         <div class="cafe-section-container">
           <div class="cafe-header">
-            <div class="cafe-subtitle">Campus Spots & Pomodoro Guide</div>
-            <h2 class="cafe-title">서울대 스팟 도감 & 카공 가이드</h2>
-            <p class="cafe-desc">
-              학우들이 사랑하는 대표 카공 명소의 특징과 뽀모도로 몰입 비결을 소개합니다.
-            </p>
+            <h2 class="cafe-title">
+              <span class="doodle-star">✦</span> 캠퍼스 스팟 <span class="doodle-star">✦</span>
+            </h2>
+            <p class="cafe-desc">서울대 4곳의 풍경과 고유한 사운드입니다.</p>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-            <!-- Spot 1 -->
-            <div class="glass-panel" style="padding: 24px;">
-              <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 6px;">🌊 자하연 (Jahayeon)</h3>
-              <p style="font-size: 0.8rem; color: var(--snu-gold); margin-bottom: 12px;">인문대 & 학생회관 사이 연못</p>
-              <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 14px;">
-                버드나무와 분수 물결이 어우러진 서울대의 대표적 사색 공간입니다. 과제 아이디어가 풀리지 않을 때 창밖을 보며 생각을 정리하기에 최적입니다.
-              </p>
-              <div style="font-size: 0.75rem; background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px;">
-                💡 <b>추천 음료</b>: 말차라떼 & 잔잔한 물소리 사운드
-              </div>
+          <!-- Minimal Postcard Cards Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+            <div style="background: var(--card-cream); border: var(--border-doodle); box-shadow: var(--shadow-doodle-sm); border-radius: var(--radius-organic); padding: 18px; text-align: center;">
+              <div style="font-size: 2.2rem; margin-bottom: 6px;">🌊</div>
+              <h3 style="font-size: 1.3rem; margin-bottom: 2px;">자하연</h3>
+              <p style="font-size: 1rem; color: var(--ink-muted);">물소리 & 빗소리</p>
             </div>
 
-            <!-- Spot 2 -->
-            <div class="glass-panel" style="padding: 24px;">
-              <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 6px;">🌿 잔디광장 (버들골)</h3>
-              <p style="font-size: 0.8rem; color: var(--snu-gold); margin-bottom: 12px;">관악산 자락 야외 명소</p>
-              <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 14px;">
-                탁 트인 관악산 하늘과 시원한 바람이 불어오는 넓은 잔디밭입니다. 노트북을 켜고 햇살을 받으며 독서나 논문 리딩을 즐기는 학우들의 쉼터입니다.
-              </p>
-              <div style="font-size: 0.75rem; background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px;">
-                💡 <b>추천 음료</b>: 자몽허니블랙티 & 자연 바람 사운드
-              </div>
+            <div style="background: var(--card-cream); border: var(--border-doodle); box-shadow: var(--shadow-doodle-sm); border-radius: var(--radius-organic); padding: 18px; text-align: center;">
+              <div style="font-size: 2.2rem; margin-bottom: 6px;">🌿</div>
+              <h3 style="font-size: 1.3rem; margin-bottom: 2px;">잔디광장</h3>
+              <p style="font-size: 1rem; color: var(--ink-muted);">바람 & 야외 소음</p>
             </div>
 
-            <!-- Spot 3 -->
-            <div class="glass-panel" style="padding: 24px;">
-              <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 6px;">📚 관정도서관</h3>
-              <p style="font-size: 0.8rem; color: var(--snu-gold); margin-bottom: 12px;">중앙도서관 관정관 열람실</p>
-              <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 14px;">
-                수많은 학우들의 진지한 열정이 모여 있는 최고의 학구적 스팟입니다. 방해 요소 없이 25분간 한 번에 끝까지 몰입하고 싶을 때 추천합니다.
-              </p>
-              <div style="font-size: 0.75rem; background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px;">
-                💡 <b>추천 음료</b>: 아이스 아메리카노 & 도서관 화이트노이즈
-              </div>
+            <div style="background: var(--card-cream); border: var(--border-doodle); box-shadow: var(--shadow-doodle-sm); border-radius: var(--radius-organic); padding: 18px; text-align: center;">
+              <div style="font-size: 2.2rem; margin-bottom: 6px;">📚</div>
+              <h3 style="font-size: 1.3rem; margin-bottom: 2px;">관정도서관</h3>
+              <p style="font-size: 1rem; color: var(--ink-muted);">도서관 화이트노이즈</p>
             </div>
 
-            <!-- Spot 4 -->
-            <div class="glass-panel" style="padding: 24px;">
-              <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 6px;">☕ 사회대 16동 라운지</h3>
-              <p style="font-size: 0.8rem; color: var(--snu-gold); margin-bottom: 12px;">통창 뷰 세련된 라운지</p>
-              <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 14px;">
-                채광 좋은 대형 유리창과 모던한 인테리어가 돋보이는 공간. 편안한 카페 음악과 함께 팀 프로젝트 회의나 에세이를 쓰기에 좋습니다.
-              </p>
-              <div style="font-size: 0.75rem; background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px;">
-                💡 <b>추천 음료</b>: 느티나무 시그니처 리딸라 & 카페 백색소음
-              </div>
-            </div>
-          </div>
-
-          <!-- Pomodoro Method Explanation -->
-          <div class="glass-panel" style="padding: 28px; margin-top: 10px;">
-            <h3 style="font-size: 1.2rem; color: var(--snu-gold); margin-bottom: 12px;">🍅 뽀모도로(Pomodoro) 테크닉이란?</h3>
-            <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 14px;">
-              인간의 뇌가 깊은 집중을 유지할 수 있는 최적의 시간인 <b>25분 집중 + 5분 휴식</b>을 한 세트로 반복하는 시간 관리 기법입니다.
-              4세트(약 2시간)를 완료한 후에는 15~30분의 긴 휴식을 취하면 인지 피로를 줄이고 장시간 몰입을 유지할 수 있습니다.
-            </p>
-            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-              <div style="flex: 1; min-width: 200px; background: rgba(255,255,255,0.04); padding: 12px 16px; border-radius: 10px;">
-                <div style="color: var(--snu-gold); font-weight: 700; margin-bottom: 4px;">1. 단 하나의 과제 선택</div>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">멀티태스킹을 피하고 25분 동안 끝낼 하나의 목표만 책상에 둡니다.</div>
-              </div>
-              <div style="flex: 1; min-width: 200px; background: rgba(255,255,255,0.04); padding: 12px 16px; border-radius: 10px;">
-                <div style="color: var(--accent-mint); font-weight: 700; margin-bottom: 4px;">2. 철저한 휴식</div>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">5분 쉬는 시간 동안에는 화면을 보지 않고 스트레칭이나 물을 마십니다.</div>
-              </div>
+            <div style="background: var(--card-cream); border: var(--border-doodle); box-shadow: var(--shadow-doodle-sm); border-radius: var(--radius-organic); padding: 18px; text-align: center;">
+              <div style="font-size: 2.2rem; margin-bottom: 6px;">☕</div>
+              <h3 style="font-size: 1.3rem; margin-bottom: 2px;">사회대 16동</h3>
+              <p style="font-size: 1rem; color: var(--ink-muted);">따뜻한 카페 소음</p>
             </div>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- Mobile Bottom Navigation (Visible on Small Screens) -->
+    <!-- Mobile Bottom Navigation -->
     <nav class="mobile-nav-bar">
       <button class="mobile-nav-item active" data-section="desk">
         <span class="icon">🏛️</span>
@@ -443,11 +297,11 @@
       </button>
       <button class="mobile-nav-item" data-section="cafe">
         <span class="icon">☕</span>
-        <span>느티나무</span>
+        <span>주문하기</span>
       </button>
       <button class="mobile-nav-item" data-section="guide">
         <span class="icon">📖</span>
-        <span>스팟도감</span>
+        <span>스팟</span>
       </button>
     </nav>
 
@@ -463,4 +317,3 @@
   <script src="js/main.js"></script>
 </body>
 </html>
-
